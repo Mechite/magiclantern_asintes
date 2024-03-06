@@ -1,6 +1,10 @@
 MODULE_CFLAGS += -I../../src/
 ML_MODULES ?= \
 	focus_sq \
+	dot_tune \
+	pic_view \
+	bulb_nd \
+	raw_twk \
 	mlv_lite \
 	mlv_play \
 	mlv_snd \
