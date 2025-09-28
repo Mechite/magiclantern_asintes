@@ -2151,6 +2151,18 @@ else
      * so undoing this hack is no longer needed */
 }
 
+int is_more_hacks_selected()
+{
+    return more_hacks == 0 ? 0 : 1;
+}
+
+static int WillSuspendAeWbTask = 0; // flag tells that we are going to suspend AeWb task
+
+int AeWbTask_Disabled()
+{
+    return WillSuspendAeWbTask;
+}
+
 static REQUIRES(RawRecTask)
 void hack_liveview(int unhack)
 {
@@ -2251,6 +2263,9 @@ void hack_liveview_more()
         cam_5d3_113 ? 0xff16d77c :
         cam_5d3_123 ? 0xff16e318 :
         0;
+
+        WillSuspendAeWbTask = 1; // we are going to suspend AeWb task (check code around shutter_blanking_idle in crop_rec.c)
+        msleep(20);
         
         lvfaceEnd();
         
@@ -3936,6 +3951,7 @@ cleanup:
         if (liveview_hacked)
         {
             hack_liveview(1);
+            if (WillSuspendAeWbTask) WillSuspendAeWbTask = 0;
         }
         
         /* re-enable powersaving  */
